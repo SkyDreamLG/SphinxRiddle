@@ -33,6 +33,7 @@ public class QuizManager {
     private List<Question> questions = new ArrayList<>();
     private List<Reward> rewards = new ArrayList<>();
     private ScheduledExecutorService scheduler;
+    private QuizScoreboard scoreboard;
 
     private ActiveQuestion currentQuestion;
     private int tickCounter = 0;
@@ -43,6 +44,7 @@ public class QuizManager {
         this.configDir = new File("config/quizcraft");
         this.questionsFile = new File(configDir, "questions.json");
         this.rewardsFile = new File(configDir, "rewards.json");
+        this.scoreboard = new QuizScoreboard(configDir);
 
         if (!configDir.exists()) {
             configDir.mkdirs();
@@ -52,6 +54,7 @@ public class QuizManager {
     public void loadConfig() {
         loadQuestions();
         loadRewards();
+        scoreboard.loadScoreboard();
         LOGGER.info("Loaded {} questions and {} rewards", questions.size(), rewards.size());
     }
 
@@ -148,7 +151,6 @@ public class QuizManager {
 
     public void askQuestion(Question question) {
         if (currentQuestion != null) {
-            // Expire current question
             currentQuestion = null;
         }
 
@@ -169,10 +171,9 @@ public class QuizManager {
 
         String answer = currentQuestion.getQuestion().getAnswer().toLowerCase();
         if (message.toLowerCase().contains(answer)) {
-            // Correct answer
             answeredPlayers.add(player.getUUID());
             rewardPlayer(player);
-            currentQuestion = null; // Question answered, clear it
+            currentQuestion = null;
         }
     }
 
@@ -191,12 +192,10 @@ public class QuizManager {
             ItemStack itemStack = new ItemStack(item, amount);
 
             if (player.getInventory().add(itemStack)) {
-                // 修复物品名称显示
                 String itemId = reward.getItemId();
                 String[] parts = itemId.split(":");
                 String itemName = parts.length > 1 ? parts[1] : itemId;
 
-                // 简单转换：iron_ingot -> Iron Ingot
                 itemName = itemName.replace("_", " ");
                 String[] words = itemName.split(" ");
                 StringBuilder displayName = new StringBuilder();
@@ -208,12 +207,16 @@ public class QuizManager {
                 }
 
                 String finalName = displayName.toString().trim();
+
+                scoreboard.addScore(player.getScoreboardName(), 1);
+                updateScoreboardForAllPlayers();
+
                 String rewardMessage = Config.REWARD_MESSAGE.get()
                         .replace("%player%", player.getScoreboardName())
                         .replace("%reward%", amount + "x " + finalName);
 
                 broadcastMessage(rewardMessage);
-                LOGGER.info("Player {} received reward: {}x {}", player.getScoreboardName(), amount, finalName);
+                LOGGER.info("Player {} received reward: {}x {} and 1 point", player.getScoreboardName(), amount, finalName);
             }
         } else {
             LOGGER.error("Invalid reward item: {}", reward.getItemId());
@@ -223,13 +226,13 @@ public class QuizManager {
     public void tick() {
         if (currentQuestion != null) {
             tickCounter++;
-            if (tickCounter >= 20) { // Check every second
+            if (tickCounter >= 20) {
                 tickCounter = 0;
                 long currentTime = System.currentTimeMillis();
                 long elapsed = (currentTime - currentQuestion.getStartTime()) / 1000;
 
                 if (elapsed >= Config.QUESTION_TIMEOUT.get()) {
-                    currentQuestion = null; // Question expired
+                    currentQuestion = null;
                     answeredPlayers.clear();
                     LOGGER.info("Question expired due to timeout");
                 }
@@ -238,7 +241,6 @@ public class QuizManager {
     }
 
     private void broadcastMessage(String message) {
-        // Remove color codes for server log
         String cleanMessage = message.replaceAll("&[0-9a-f]", "");
         Component component = Component.literal(message.replace("&", "§"));
 
@@ -248,10 +250,26 @@ public class QuizManager {
         LOGGER.info(cleanMessage);
     }
 
+    // 计分板相关方法
+    public void initializeScoreboard() {
+        scoreboard.initializeScoreboard(server);
+        updateScoreboardForAllPlayers();
+    }
+
+    public void updateScoreboardForAllPlayers() {
+        scoreboard.updateScoreboardDisplay(server);
+    }
+
+    public void resetScoreboard() {
+        scoreboard.resetScoreboard();
+        updateScoreboardForAllPlayers();
+    }
+
     // Getters and setters
     public List<Question> getQuestions() { return questions; }
     public List<Reward> getRewards() { return rewards; }
     public ActiveQuestion getCurrentQuestion() { return currentQuestion; }
+    public QuizScoreboard getScoreboard() { return scoreboard; } // 添加这个方法
 
     public void addQuestion(Question question) {
         questions.add(question);
@@ -263,11 +281,22 @@ public class QuizManager {
         saveRewards();
     }
 
+    public void removeQuestion(String questionText) {
+        questions.removeIf(question -> question.getQuestion().equals(questionText));
+        saveQuestions();
+    }
+
+    public void removeReward(String itemId) {
+        rewards.removeIf(reward -> reward.getItemId().equals(itemId));
+        saveRewards();
+    }
+
     public void reload() {
         loadConfig();
         stopAutoQuestionTimer();
         startAutoQuestionTimer();
         currentQuestion = null;
         answeredPlayers.clear();
+        updateScoreboardForAllPlayers();
     }
 }
