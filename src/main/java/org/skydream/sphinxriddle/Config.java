@@ -1,6 +1,5 @@
-package org.skydream.quizcraft;
+package org.skydream.sphinxriddle;
 
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class Config {
@@ -16,7 +15,7 @@ public class Config {
     public static final ModConfigSpec.ConfigValue<String> CONFIG_RELOADED_MESSAGE;
 
     static {
-        BUILDER.push("QuizCraft Configuration");
+        BUILDER.push("SphinxRiddle Configuration");
 
         QUESTION_INTERVAL = BUILDER
                 .comment("Time between auto questions (in seconds)")
@@ -44,7 +43,7 @@ public class Config {
 
         CONFIG_RELOADED_MESSAGE = BUILDER
                 .comment("Message when config is reloaded")
-                .define("configReloadedMessage", "&aQuizCraft 配置重载完成");
+                .define("configReloadedMessage", "&aSphinxRiddle 配置重载完成");
 
         BUILDER.pop();
         SPEC = BUILDER.build();

@@ -1,4 +1,4 @@
-package org.skydream.quizcraft;
+package org.skydream.sphinxriddle;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,22 +26,21 @@ public class QuizManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private final MinecraftServer server;
-    private final File configDir;
     private final File questionsFile;
     private final File rewardsFile;
 
     private List<Question> questions = new ArrayList<>();
     private List<Reward> rewards = new ArrayList<>();
     private ScheduledExecutorService scheduler;
-    private QuizScoreboard scoreboard;
+    private final QuizScoreboard scoreboard;
 
     private ActiveQuestion currentQuestion;
     private int tickCounter = 0;
-    private Set<UUID> answeredPlayers = new ConcurrentHashMap().newKeySet();
+    private final Set<UUID> answeredPlayers = ConcurrentHashMap.newKeySet();
 
     public QuizManager(MinecraftServer server) {
         this.server = server;
-        this.configDir = new File("config/quizcraft");
+        File configDir = new File("config/sphinxriddle");
         this.questionsFile = new File(configDir, "questions.json");
         this.rewardsFile = new File(configDir, "rewards.json");
         this.scoreboard = new QuizScoreboard(configDir);
@@ -187,39 +186,35 @@ public class QuizManager {
 
         Item item = BuiltInRegistries.ITEM.get(reward.getItemResourceLocation());
 
-        if (item != null) {
-            int amount = new Random().nextInt(reward.getMaxAmount()) + 1;
-            ItemStack itemStack = new ItemStack(item, amount);
+        int amount = new Random().nextInt(reward.getMaxAmount()) + 1;
+        ItemStack itemStack = new ItemStack(item, amount);
 
-            if (player.getInventory().add(itemStack)) {
-                String itemId = reward.getItemId();
-                String[] parts = itemId.split(":");
-                String itemName = parts.length > 1 ? parts[1] : itemId;
+        if (player.getInventory().add(itemStack)) {
+            String itemId = reward.getItemId();
+            String[] parts = itemId.split(":");
+            String itemName = parts.length > 1 ? parts[1] : itemId;
 
-                itemName = itemName.replace("_", " ");
-                String[] words = itemName.split(" ");
-                StringBuilder displayName = new StringBuilder();
-                for (String word : words) {
-                    if (!word.isEmpty()) {
-                        displayName.append(Character.toUpperCase(word.charAt(0)))
-                                .append(word.substring(1)).append(" ");
-                    }
+            itemName = itemName.replace("_", " ");
+            String[] words = itemName.split(" ");
+            StringBuilder displayName = new StringBuilder();
+            for (String word : words) {
+                if (!word.isEmpty()) {
+                    displayName.append(Character.toUpperCase(word.charAt(0)))
+                            .append(word.substring(1)).append(" ");
                 }
-
-                String finalName = displayName.toString().trim();
-
-                scoreboard.addScore(player.getScoreboardName(), 1);
-                updateScoreboardForAllPlayers();
-
-                String rewardMessage = Config.REWARD_MESSAGE.get()
-                        .replace("%player%", player.getScoreboardName())
-                        .replace("%reward%", amount + "x " + finalName);
-
-                broadcastMessage(rewardMessage);
-                LOGGER.info("Player {} received reward: {}x {} and 1 point", player.getScoreboardName(), amount, finalName);
             }
-        } else {
-            LOGGER.error("Invalid reward item: {}", reward.getItemId());
+
+            String finalName = displayName.toString().trim();
+
+            scoreboard.addScore(player.getScoreboardName(), 1);
+            updateScoreboardForAllPlayers();
+
+            String rewardMessage = Config.REWARD_MESSAGE.get()
+                    .replace("%player%", player.getScoreboardName())
+                    .replace("%reward%", amount + "x " + finalName);
+
+            broadcastMessage(rewardMessage);
+            LOGGER.info("Player {} received reward: {}x {} and 1 point", player.getScoreboardName(), amount, finalName);
         }
     }
 
@@ -260,15 +255,10 @@ public class QuizManager {
         scoreboard.updateScoreboardDisplay(server);
     }
 
-    public void resetScoreboard() {
-        scoreboard.resetScoreboard();
-        updateScoreboardForAllPlayers();
-    }
-
     // Getters and setters
     public List<Question> getQuestions() { return questions; }
     public List<Reward> getRewards() { return rewards; }
-    public ActiveQuestion getCurrentQuestion() { return currentQuestion; }
+
     public QuizScoreboard getScoreboard() { return scoreboard; } // 添加这个方法
 
     public void addQuestion(Question question) {

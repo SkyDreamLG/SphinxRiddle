@@ -1,4 +1,4 @@
-package org.skydream.quizcraft;
+package org.skydream.sphinxriddle;
 
 public class ActiveQuestion {
     private final Question question;

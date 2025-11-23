@@ -1,14 +1,14 @@
-# QuizCraft - Minecraft Quiz Competition Mod
+# Sphinx Riddle - Minecraft Quiz Competition Mod
 
 <div align="center">
-  <img alt="logo" src="https://raw.githubusercontent.com/SkyDreamLG/QuizCraft/refs/heads/master/logo.svg" width="120px">
+  <img alt="logo" src="https://raw.githubusercontent.com/SkyDreamLG/SphinxRiddle/refs/heads/master/logo.svg" width="120px">
   <br><br>
   <em>🎮 Quiz Competition System for Minecraft Servers</em>
 </div>
 
 <p align="center">
-  <a href="https://github.com/SkyDreamLG/QuizCraft/releases"><img alt="release" src="https://img.shields.io/github/v/release/SkyDreamLG/QuizCraft?style=for-the-badge"></a>
-  <a href="https://github.com/SkyDreamLG/QuizCraft/issues"><img alt="issues" src="https://img.shields.io/github/issues/SkyDreamLG/QuizCraft?style=for-the-badge"></a>
+  <a href="https://github.com/SkyDreamLG/SphinxRiddle/releases"><img alt="release" src="https://img.shields.io/github/v/release/SkyDreamLG/SphinxRiddle?style=for-the-badge"></a>
+  <a href="https://github.com/SkyDreamLG/SphinxRiddle/issues"><img alt="issues" src="https://img.shields.io/github/issues/SkyDreamLG/SphinxRiddle?style=for-the-badge"></a>
   <a href="./LICENSE"><img alt="license" src="https://img.shields.io/badge/license-LGPL--2.1-green?style=for-the-badge"></a>
 </p>
 
@@ -39,7 +39,7 @@ English | [中文](./readme_cn.md)
   - [x] Persistent score storage
 
 - [x] **Comprehensive Commands**
-  - [x] Player commands: `/qc question`
+  - [x] Player commands: `/sr question`
   - [x] Admin commands: Question/reward management, scoreboard control
   - [x] Permission-based command access
 
@@ -51,35 +51,35 @@ English | [中文](./readme_cn.md)
 ## Quick Start
 
 ### Installation
-1. Download the latest `quizcraft.jar` from [Releases](https://github.com/skydream/quizcraft/releases)
+1. Download the latest `sphinx_riddle.jar` from [Releases](https://github.com/SkyDreamLG/SphinxRiddle/releases)
 2. Place it in your server's `mods` folder
 3. Restart the server
 
 ### Basic Usage
 **For Players:**
 - Answer questions directly in chat when they appear
-- Use `/qc question` to manually start a new question
+- Use `/sr question` to manually start a new question
 - Check your ranking on the right-side scoreboard
 
 **For Admins:**
 ```bash
 # Reload configuration
-/qc reload
+/sr reload
 
 # Add questions
-/qc add question "What tool mines diamond?" "Iron Pickaxe"
+/sr add question "What tool mines diamond?" "Iron Pickaxe"
 
 # Add rewards with auto-completion
-/qc add reward minecraft:diamond 5
+/sr add reward minecraft:diamond 5
 
 # Manage rankings
-/qc list ranking
-/qc reset ranking
+/sr list ranking
+/sr reset ranking
 ```
 
 ## Configuration
 
-Configuration files are located in `config/quizcraft/`:
+Configuration files are located in `config/sphinx_riddle/`:
 
 - `questions.json` - Question and answer pairs
 - `rewards.json` - Reward items and maximum amounts
@@ -112,27 +112,27 @@ Configuration files are located in `config/quizcraft/`:
 ### Player Commands
 | Command | Description | Permission |
 |---------|-------------|------------|
-| `/qc question` | Start a new question | All players |
+| `/sr question` | Start a new question | All players |
 
 ### Admin Commands
 | Command | Description | Permission |
 |---------|-------------|------------|
-| `/qc reload` | Reload configuration | OP |
-| `/qc add question <question> <answer>` | Add new question | OP |
-| `/qc add reward <item> <maxAmount>` | Add reward item | OP |
-| `/qc list question` | List all questions | OP |
-| `/qc list reward` | List all rewards | OP |
-| `/qc list ranking` | Show leaderboard | OP |
-| `/qc reset ranking` | Reset scores | OP |
-| `/qc remove question <question>` | Remove question | OP |
-| `/qc remove reward <item>` | Remove reward | OP |
+| `/sr reload` | Reload configuration | OP |
+| `/sr add question <question> <answer>` | Add new question | OP |
+| `/sr add reward <item> <maxAmount>` | Add reward item | OP |
+| `/sr list question` | List all questions | OP |
+| `/sr list reward` | List all rewards | OP |
+| `/sr list ranking` | Show leaderboard | OP |
+| `/sr reset ranking` | Reset scores | OP |
+| `/sr remove question <question>` | Remove question | OP |
+| `/sr remove reward <item>` | Remove reward | OP |
 
 ## Development
 
 ### Building from Source
 ```bash
-git clone https://github.com/skydream/quizcraft.git
-cd quizcraft
+git clone https://github.com/SkyDreamLG/SphinxRiddle.git
+cd SphinxRiddle
 ./gradlew build
 ```
 
@@ -143,8 +143,8 @@ cd quizcraft
 
 ## Support
 
-- [GitHub Discussions](https://github.com/skydream/quizcraft/discussions) - For questions and support
-- [Issue Tracker](https://github.com/skydream/quizcraft/issues) - For bug reports and feature requests
+- [GitHub Discussions](https://github.com/SkyDreamLG/SphinxRiddle/discussions) - For questions and support
+- [Issue Tracker](https://github.com/SkyDreamLG/SphinxRiddle/issues) - For bug reports and feature requests
 
 ## License
 

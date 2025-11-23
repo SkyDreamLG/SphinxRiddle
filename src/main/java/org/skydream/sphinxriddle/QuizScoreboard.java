@@ -1,4 +1,4 @@
-package org.skydream.quizcraft;
+package org.skydream.sphinxriddle;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -79,10 +79,6 @@ public class QuizScoreboard {
         return sortedScores;
     }
 
-    public int getPlayerScore(String playerName) {
-        return playerScores.getOrDefault(playerName, 0);
-    }
-
     // 计分板显示功能
     public void initializeScoreboard(MinecraftServer server) {
         createScoreboard(server);
@@ -94,7 +90,7 @@ public class QuizScoreboard {
 
     private void createScoreboard(MinecraftServer server) {
         Scoreboard scoreboard = server.getScoreboard();
-        String objectiveName = "quizcraft_ranking";
+        String objectiveName = "sphinxriddle_ranking";
 
         // 移除旧目标
         Objective oldObj = scoreboard.getObjective(objectiveName);
@@ -144,17 +140,15 @@ public class QuizScoreboard {
 
     // 内部类
     private static class PlayerScore {
-        private String playerName;
-        private int score;
+        private final String playerName;
+        private final int score;
 
-        public PlayerScore() {}
         public PlayerScore(String playerName, int score) {
             this.playerName = playerName;
             this.score = score;
         }
         public String getPlayerName() { return playerName; }
         public int getScore() { return score; }
-        public void setPlayerName(String playerName) { this.playerName = playerName; }
-        public void setScore(int score) { this.score = score; }
+
     }
 }

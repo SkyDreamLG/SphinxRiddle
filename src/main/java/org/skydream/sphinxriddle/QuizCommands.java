@@ -1,4 +1,4 @@
-package org.skydream.quizcraft;
+package org.skydream.sphinxriddle;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class QuizCommands {
 
@@ -23,7 +22,7 @@ public class QuizCommands {
         System.out.println("QuizCommands: 开始注册命令");
 
         // 主命令 - 帮助
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .executes(ctx -> {
                     showHelp(ctx.getSource());
                     return Command.SINGLE_SUCCESS;
@@ -31,21 +30,21 @@ public class QuizCommands {
         );
 
         // 普通玩家命令
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("question")
                         .requires(source -> source.hasPermission(0))
                         .executes(ctx -> askNewQuestion(ctx.getSource())))
         );
 
         // 重载命令
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("reload")
                         .requires(source -> source.hasPermission(2))
                         .executes(ctx -> reloadConfig(ctx.getSource())))
         );
 
         // 添加问题
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("add")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("question")
@@ -58,7 +57,7 @@ public class QuizCommands {
         );
 
         // ★★★ 添加奖励（物品自动补全）
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("add")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("reward")
@@ -79,7 +78,7 @@ public class QuizCommands {
         );
 
         // 列出问题
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("list")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("question")
@@ -88,7 +87,7 @@ public class QuizCommands {
         );
 
         // 列出奖励
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("list")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("reward")
@@ -97,7 +96,7 @@ public class QuizCommands {
         );
 
         // 排行榜
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("list")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("ranking")
@@ -106,7 +105,7 @@ public class QuizCommands {
         );
 
         // 重置排行榜
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("reset")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("ranking")
@@ -115,7 +114,7 @@ public class QuizCommands {
         );
 
         // 移除问题
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("remove")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("question")
@@ -127,7 +126,7 @@ public class QuizCommands {
         );
 
         // ★★★ 移除奖励（同样使用物品自动补全）
-        dispatcher.register(Commands.literal("qc")
+        dispatcher.register(Commands.literal("sr")
                 .then(Commands.literal("remove")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("reward")
@@ -148,25 +147,25 @@ public class QuizCommands {
     }
 
     private static void showHelp(CommandSourceStack source) {
-        source.sendSuccess(() -> Component.literal("§6=== QuizCraft 命令帮助 ==="), false);
-        source.sendSuccess(() -> Component.literal("§a/qc question §7- 发起新问题"), false);
-        source.sendSuccess(() -> Component.literal("§e/qc add reward <物品> <数量> §7- 添加奖励"), false);
-        source.sendSuccess(() -> Component.literal("§e/qc remove reward <物品> §7- 移除奖励"), false);
+        source.sendSuccess(() -> Component.literal("§6=== SphinxRiddle 命令帮助 ==="), false);
+        source.sendSuccess(() -> Component.literal("§a/sr question §7- 发起新问题"), false);
+        source.sendSuccess(() -> Component.literal("§e/sr add reward <物品> <数量> §7- 添加奖励"), false);
+        source.sendSuccess(() -> Component.literal("§e/sr remove reward <物品> §7- 移除奖励"), false);
     }
 
     private static int reloadConfig(CommandSourceStack source) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             manager.reload();
             source.sendSuccess(() -> Component.literal("§a已重载配置"), true);
             return Command.SINGLE_SUCCESS;
         }
-        source.sendSuccess(() -> Component.literal("§cQuizManager 未初始化"), true);
+        source.sendSuccess(() -> Component.literal("§cSphinxRiddle 未初始化"), true);
         return 0;
     }
 
     private static int addQuestion(CommandSourceStack source, String question, String answer) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             manager.addQuestion(new Question(question, answer));
             source.sendSuccess(() -> Component.literal("§a添加问题: " + question), true);
@@ -176,7 +175,7 @@ public class QuizCommands {
     }
 
     private static int addReward(CommandSourceStack source, String itemId, int maxAmount) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             manager.addReward(new Reward(itemId, maxAmount));
             source.sendSuccess(() -> Component.literal("§a添加奖励: " + itemId + " *" + maxAmount), true);
@@ -186,7 +185,7 @@ public class QuizCommands {
     }
 
     private static int askNewQuestion(CommandSourceStack source) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             manager.askRandomQuestion();
             source.sendSuccess(() -> Component.literal("§a已发布新问题"), true);
@@ -196,7 +195,7 @@ public class QuizCommands {
     }
 
     private static int listQuestions(CommandSourceStack source) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             source.sendSuccess(() -> Component.literal("§6=== 问题列表 ==="), false);
             int i = 1;
@@ -211,7 +210,7 @@ public class QuizCommands {
     }
 
     private static int listRewards(CommandSourceStack source) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             source.sendSuccess(() -> Component.literal("§6=== 奖励列表 ==="), false);
             int i = 1;
@@ -226,7 +225,7 @@ public class QuizCommands {
     }
 
     private static int listRanking(CommandSourceStack source) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             // 使用正确的方法调用
             Map<String, Integer> rankings = manager.getScoreboard().getRankings();
@@ -246,24 +245,24 @@ public class QuizCommands {
             }
             return Command.SINGLE_SUCCESS;
         }
-        source.sendSuccess(() -> Component.literal("§cQuizManager 未初始化"), true);
+        source.sendSuccess(() -> Component.literal("§cSphinxRiddle 未初始化"), true);
         return 0;
     }
 
     private static int resetRanking(CommandSourceStack source) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             manager.getScoreboard().resetScoreboard();
             manager.updateScoreboardForAllPlayers();
             source.sendSuccess(() -> Component.literal("§a排行榜已重置"), true);
             return Command.SINGLE_SUCCESS;
         }
-        source.sendSuccess(() -> Component.literal("§cQuizManager 未初始化"), true);
+        source.sendSuccess(() -> Component.literal("§cSphinxRiddle 未初始化"), true);
         return 0;
     }
 
     private static int removeQuestion(CommandSourceStack source, String text) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             manager.removeQuestion(text);
             source.sendSuccess(() -> Component.literal("§a已移除问题: " + text), true);
@@ -273,7 +272,7 @@ public class QuizCommands {
     }
 
     private static int removeReward(CommandSourceStack source, String itemId) {
-        QuizManager manager = Quizcraft.getQuizManager();
+        QuizManager manager = SphinxRiddle.getQuizManager();
         if (manager != null) {
             manager.removeReward(itemId);
             source.sendSuccess(() -> Component.literal("§a已移除奖励: " + itemId), true);

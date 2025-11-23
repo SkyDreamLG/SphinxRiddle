@@ -1,14 +1,14 @@
-# QuizCraft - Minecraft 问答竞赛模组
+# Sphinx Riddle - Minecraft 问答竞赛模组
 
 <div align="center">
-  <img alt="logo" src="https://raw.githubusercontent.com/SkyDreamLG/QuizCraft/refs/heads/master/logo.svg" width="120px">
+  <img alt="logo" src="https://raw.githubusercontent.com/SkyDreamLG/SphinxRiddle/refs/heads/master/logo.svg" width="120px">
   <br><br>
   <em>🎮 一个功能完整、可定制的 Minecraft 服务器问答竞赛系统</em>
 </div>
 
 <p align="center">
-  <a href="https://github.com/SkyDreamLG/QuizCraft/releases"><img alt="release" src="https://img.shields.io/github/v/release/SkyDreamLG/QuizCraft?style=for-the-badge"></a>
-  <a href="https://github.com/SkyDreamLG/QuizCraft/issues"><img alt="issues" src="https://img.shields.io/github/issues/SkyDreamLG/QuizCraft?style=for-the-badge"></a>
+  <a href="https://github.com/SkyDreamLG/SphinxRiddle/releases"><img alt="release" src="https://img.shields.io/github/v/release/SkyDreamLG/SphinxRiddle?style=for-the-badge"></a>
+  <a href="https://github.com/SkyDreamLG/SphinxRiddle/issues"><img alt="issues" src="https://img.shields.io/github/issues/SkyDreamLG/SphinxRiddle?style=for-the-badge"></a>
   <a href="./LICENSE"><img alt="license" src="https://img.shields.io/badge/license-LGPL--2.1-green?style=for-the-badge"></a>
 </p>
 
@@ -39,7 +39,7 @@
   - [x] 持久化分数存储
 
 - [x] **完整命令系统**
-  - [x] 玩家命令：`/qc question`
+  - [x] 玩家命令：`/sr question`
   - [x] 管理员命令：问题/奖励管理，计分板控制
   - [x] 基于权限的命令访问
 
@@ -51,35 +51,35 @@
 ## 快速开始
 
 ### 安装
-1. 从[发布页面](https://github.com/SkyDreamLG/QuizCraft/releases)下载最新的 `quizcraft.jar`
+1. 从[发布页面](https://github.com/SkyDreamLG/SphinxRiddle/releases)下载最新的 `sphinx_riddle.jar`
 2. 将其放入服务器的 `mods` 文件夹
 3. 重启服务器
 
 ### 基本使用
 **玩家操作：**
 - 问题出现时直接在聊天框回答
-- 使用 `/qc question` 手动开始新问题
+- 使用 `/sr question` 手动开始新问题
 - 在右侧计分板查看排名
 
 **管理员操作：**
 ```bash
 # 重载配置
-/qc reload
+/sr reload
 
 # 添加问题
-/qc add question "什么工具可以挖钻石？" "铁镐"
+/sr add question "什么工具可以挖钻石？" "铁镐"
 
 # 添加奖励（支持自动补全）
-/qc add reward minecraft:diamond 5
+/sr add reward minecraft:diamond 5
 
 # 管理排名
-/qc list ranking
-/qc reset ranking
+/sr list ranking
+/sr reset ranking
 ```
 
 ## 配置
 
-配置文件位于 `config/quizcraft/`：
+配置文件位于 `config/sphinx_riddle/`：
 
 - `questions.json` - 问题和答案对
 - `rewards.json` - 奖励物品和最大数量
@@ -112,27 +112,27 @@
 ### 玩家命令
 | 命令 | 描述 | 权限 |
 |------|------|------|
-| `/qc question` | 开始新问题 | 所有玩家 |
+| `/sr question` | 开始新问题 | 所有玩家 |
 
 ### 管理员命令
 | 命令 | 描述 | 权限 |
 |------|------|------|
-| `/qc reload` | 重载配置 | OP |
-| `/qc add question <问题> <答案>` | 添加新问题 | OP |
-| `/qc add reward <物品> <最大数量>` | 添加奖励物品 | OP |
-| `/qc list question` | 列出所有问题 | OP |
-| `/qc list reward` | 列出所有奖励 | OP |
-| `/qc list ranking` | 显示排行榜 | OP |
-| `/qc reset ranking` | 重置分数 | OP |
-| `/qc remove question <问题>` | 移除问题 | OP |
-| `/qc remove reward <物品>` | 移除奖励 | OP |
+| `/sr reload` | 重载配置 | OP |
+| `/sr add question <问题> <答案>` | 添加新问题 | OP |
+| `/sr add reward <物品> <最大数量>` | 添加奖励物品 | OP |
+| `/sr list question` | 列出所有问题 | OP |
+| `/sr list reward` | 列出所有奖励 | OP |
+| `/sr list ranking` | 显示排行榜 | OP |
+| `/sr reset ranking` | 重置分数 | OP |
+| `/sr remove question <问题>` | 移除问题 | OP |
+| `/sr remove reward <物品>` | 移除奖励 | OP |
 
 ## 开发
 
 ### 从源码构建
 ```bash
-git clone https://github.com/SkyDreamLG/QuizCraft.git
-cd QuizCraft
+git clone https://github.com/SkyDreamLG/SphinxRiddle.git
+cd SphinxRiddle
 ./gradlew build
 ```
 
@@ -143,8 +143,8 @@ cd QuizCraft
 
 ## 支持
 
-- [GitHub讨论区](https://github.com/SkyDreamLG/QuizCraft/discussions) - 问题和支持
-- [问题追踪](https://github.com/SkyDreamLG/QuizCraft/issues) - 错误报告和功能请求
+- [GitHub讨论区](https://github.com/SkyDreamLG/SphinxRiddle/discussions) - 问题和支持
+- [问题追踪](https://github.com/SkyDreamLG/SphinxRiddle/issues) - 错误报告和功能请求
 
 ## 许可证
 
