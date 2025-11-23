@@ -79,7 +79,7 @@
 
 ## 配置
 
-配置文件位于 `config/sphinx_riddle/`：
+配置文件位于 `config/sphinxriddle/`：
 
 - `questions.json` - 问题和答案对
 - `rewards.json` - 奖励物品和最大数量
