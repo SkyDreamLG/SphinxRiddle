@@ -79,7 +79,7 @@ English | [中文](./readme_cn.md)
 
 ## Configuration
 
-Configuration files are located in `config/sphinx_riddle/`:
+Configuration files are located in `config/sphinxriddle/`:
 
 - `questions.json` - Question and answer pairs
 - `rewards.json` - Reward items and maximum amounts
