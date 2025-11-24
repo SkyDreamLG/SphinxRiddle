@@ -221,4 +221,8 @@ This project is licensed under the GNU LGPL 2.1 License - see the [LICENSE](LICE
 
 ---
 
-**Note**: The scoreboard display and manual question commands can be disabled in the configuration file for server customization.
+**Note**: 
+
+1.The scoreboard display and manual question commands can be disabled in the configuration file for server customization.
+
+2.The prompt information in the configuration file defaults to Chinese. If you need other languages, please modify the configuration file accordingly
